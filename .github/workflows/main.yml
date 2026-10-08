@@ -1,0 +1,32 @@
+name: Build Android APK (PWA to APK)
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-size: 20
+
+    - name: Install Bubblewrap CLI
+      run: npm install -g @bubblewrap/cli
+
+    - name: Initialize and Build APK
+      run: |
+        # Mengonversi Web App dari GitHub menjadi Android Project secara otomatis
+        # Pastikan manifest.json web Anda valid
+        bubblewrap init --manifest=./manifest.json --meta=./
+        bubblewrap build --skipSigning
+        
+    - name: Upload APK Ready to Download
+      uses: actions/upload-artifact@v4
+      with:
+        name: BukuKas-Pro-Android-APK
+        path: ./*.apk

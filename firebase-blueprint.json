@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information authenticated via Google",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Google user unique identifier" },
+        "email": { "type": "string", "format": "email", "description": "Google email address" },
+        "displayName": { "type": "string", "maxLength": 100, "description": "User display name" },
+        "photoURL": { "type": "string", "maxLength": 500, "description": "Google profile photo URL" },
+        "createdAt": { "type": "string", "description": "Account registration timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "UserSubAccount": {
+      "title": "UserSubAccount",
+      "description": "Chart of accounts subaccount owned by user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number", "description": "Numeric ID of subaccount" },
+        "userId": { "type": "string", "description": "Owner Google UID" },
+        "category": { "type": "string", "enum": ["HARTA", "UTANG", "MODAL", "PENDAPATAN", "BIAYA"], "description": "Accounting category" },
+        "code": { "type": "string", "maxLength": 20, "description": "Account code e.g. 1.1.1" },
+        "name": { "type": "string", "maxLength": 100, "description": "Account name" },
+        "iconName": { "type": "string", "maxLength": 50, "description": "Icon identifier" },
+        "initialBalance": { "type": "number", "description": "Initial balance in IDR" },
+        "isDefault": { "type": "boolean", "description": "Whether this is a default account" },
+        "updatedAt": { "type": "number", "description": "Timestamp millis" }
+      },
+      "required": ["id", "userId", "category", "code", "name"]
+    },
+    "UserTransaction": {
+      "title": "UserTransaction",
+      "description": "Financial transaction record belonging to user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number", "description": "Numeric transaction ID" },
+        "userId": { "type": "string", "description": "Owner Google UID" },
+        "date": { "type": "number", "description": "Transaction date in millis" },
+        "amount": { "type": "number", "description": "Amount in IDR" },
+        "fromAccountId": { "type": "number", "description": "Source account ID (Credit)" },
+        "toAccountId": { "type": "number", "description": "Destination account ID (Debit)" },
+        "type": { "type": "string", "enum": ["PENGELUARAN", "PEMASUKAN", "TRANSFER", "BAYAR_UTANG", "TAMBAH_MODAL"], "description": "Transaction classification" },
+        "category": { "type": "string", "enum": ["HARTA", "UTANG", "MODAL", "PENDAPATAN", "BIAYA"], "description": "Primary accounting group" },
+        "description": { "type": "string", "maxLength": 300, "description": "Transaction notes" },
+        "referenceNumber": { "type": "string", "maxLength": 50, "description": "Reference number e.g. TRX-0001" },
+        "updatedAt": { "type": "number", "description": "Timestamp millis" }
+      },
+      "required": ["id", "userId", "amount", "fromAccountId", "toAccountId", "type", "category"]
+    },
+    "UserBackup": {
+      "title": "UserBackup",
+      "description": "Full cloud snapshot backup for user Google Account",
+      "type": "object",
+      "properties": {
+        "backupId": { "type": "string", "description": "Backup snapshot identifier" },
+        "userId": { "type": "string", "description": "Owner Google UID" },
+        "email": { "type": "string", "description": "Google account email" },
+        "timestamp": { "type": "number", "description": "Backup timestamp millis" },
+        "accountsCount": { "type": "number", "description": "Total subaccounts backed up" },
+        "transactionsCount": { "type": "number", "description": "Total transactions backed up" },
+        "totalHarta": { "type": "number", "description": "Snapshot total harta" },
+        "totalUtang": { "type": "number", "description": "Snapshot total utang" },
+        "netWorth": { "type": "number", "description": "Snapshot net worth" },
+        "dataJson": { "type": "string", "description": "Compressed snapshot JSON string" }
+      },
+      "required": ["backupId", "userId", "timestamp", "dataJson"]
+    },
+    "UserMonthlyClosing": {
+      "title": "UserMonthlyClosing",
+      "description": "Monthly period close record allocating profit/loss to retained earnings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Period ID e.g. CLOSING-2026-10" },
+        "userId": { "type": "string", "description": "Owner Google UID" },
+        "year": { "type": "number", "description": "Calendar year" },
+        "month": { "type": "number", "description": "Month index 1-12" },
+        "monthLabel": { "type": "string", "description": "Indonesian month label" },
+        "closedAt": { "type": "number", "description": "Timestamp closed in millis" },
+        "totalPendapatan": { "type": "number", "description": "Total monthly revenue" },
+        "totalBiaya": { "type": "number", "description": "Total monthly expense" },
+        "netProfitOrLoss": { "type": "number", "description": "Net profit or loss" },
+        "retainedEarningsAccountId": { "type": "number", "description": "Target equity account ID" },
+        "retainedEarningsAccountName": { "type": "string", "description": "Target account name" },
+        "notes": { "type": "string", "description": "Closing notes" }
+      },
+      "required": ["id", "userId", "year", "month", "closedAt", "netProfitOrLoss", "retainedEarningsAccountId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document owned strictly by authenticated user"
+    },
+    "/users/{userId}/accounts/{accountId}": {
+      "schema": "UserSubAccount",
+      "description": "Private subaccounts of the user"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "UserTransaction",
+      "description": "Private financial transactions of the user"
+    },
+    "/users/{userId}/monthly_closings/{closingId}": {
+      "schema": "UserMonthlyClosing",
+      "description": "Private monthly closing records of the user"
+    },
+    "/users/{userId}/backups/{backupId}": {
+      "schema": "UserBackup",
+      "description": "Cloud backup snapshots stored in the user's Google account space"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "BukuKas Pro",
+  "description": "Aplikasi laporan keuangan harian perorangan lengkap dengan 5 kelompok akun (Harta, Utang, Modal, Pendapatan, Biaya), subakun, grafik pengeluaran, dan sinkronisasi cloud.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

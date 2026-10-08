@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F243A"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#064E3B"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="50%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+
+  <!-- Subtle inner border ring -->
+  <rect x="16" y="16" width="480" height="480" rx="98" fill="none" stroke="#34D399" stroke-width="4" stroke-opacity="0.25"/>
+
+  <!-- Central Emblem Shield & Columns -->
+  <g filter="url(#shadow)">
+    <!-- Bank Pediment / Roof -->
+    <path d="M 256 112 L 128 184 L 384 184 Z" fill="url(#emeraldGrad)"/>
+    <rect x="136" y="184" width="240" height="14" rx="4" fill="#6EE7B7"/>
+
+    <!-- Pillars -->
+    <rect x="156" y="210" width="28" height="120" rx="6" fill="#FFFFFF"/>
+    <rect x="214" y="210" width="28" height="120" rx="6" fill="#FFFFFF"/>
+    <rect x="270" y="210" width="28" height="120" rx="6" fill="#FFFFFF"/>
+    <rect x="328" y="210" width="28" height="120" rx="6" fill="#FFFFFF"/>
+
+    <!-- Base steps -->
+    <rect x="136" y="336" width="240" height="16" rx="5" fill="#6EE7B7"/>
+    <rect x="120" y="356" width="272" height="20" rx="6" fill="url(#emeraldGrad)"/>
+
+    <!-- Sparkling Golden Coin Badge in front -->
+    <circle cx="348" cy="320" r="44" fill="url(#goldGrad)" stroke="#FEF3C7" stroke-width="4"/>
+    <text x="348" y="336" font-family="system-ui, sans-serif" font-size="44" font-weight="900" fill="#78350F" text-anchor="middle">Rp</text>
+  </g>
+</svg>
